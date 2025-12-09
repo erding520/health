@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>“三减三健”健康生活指南</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "微软雅黑"; }
+        body { overflow: hidden; }
+        .page { 
+            width: 100vw; 
+            height: 100vh; 
+            padding: 20px; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            align-items: center; 
+            text-align: center; 
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: opacity 0.5s;
+            opacity: 0;
+            pointer-events: none;
+        }
+        .page.active { opacity: 1; pointer-events: all; }
+
+        /* 页面背景色 */
+        .page1 { background: #e8f5e9; }
+        .page2 { background: #f1f8e9; }
+        .page3 { background: #fff3e0; }
+        .page4 { background: #ffe0b2; }
+        .page5 { background: #e1f5fe; }
+        .page6 { background: #e0f7fa; }
+        .page7 { background: #f3e5f5; }
+        .page8 { background: #e8f5e9; }
+
+        h1 { font-size: 28px; margin-bottom: 20px; color: #2e7d32; }
+        h2 { font-size: 22px; margin: 15px 0; color: #388e3c; }
+        p { font-size: 16px; line-height: 1.8; margin: 10px 0; }
+        .btn { 
+            padding: 10px 20px; 
+            background: #4caf50; 
+            color: white; 
+            border: none; 
+            border-radius: 5px; 
+            margin: 15px 5px; 
+            cursor: pointer; 
+            font-size: 16px;
+        }
+        .tip { 
+            display: none; 
+            padding: 15px; 
+            background: #fff; 
+            border-radius: 8px; 
+            margin-top: 15px; 
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            width: 80%;
+        }
+        .scale { 
+            width: 80%; 
+            height: 20px; 
+            background: #eee; 
+            border-radius: 10px; 
+            margin: 20px 0; 
+            position: relative; 
+        }
+        .scale-bar { 
+            width: 20%; 
+            height: 100%; 
+            background: #ff5722; 
+            border-radius: 10px; 
+        }
+        .scale-text { 
+            position: absolute; 
+            top: -25px; 
+            right: 0; 
+            color: #ff5722; 
+        }
+        .food-list { display: flex; justify-content: space-around; width: 100%; margin: 20px 0; }
+        .food-item { padding: 10px; background: #fff; border-radius: 8px; cursor: pointer; }
+        .bmi-input { margin: 10px 0; padding: 8px; width: 60%; border: 1px solid #ccc; border-radius: 5px; }
+        .result { margin-top: 20px; padding: 15px; background: #fff; border-radius: 8px; width: 80%; }
+    </style>
+</head>
+<body>
+    <!-- 1. 封面页 -->
+    <div class="page page1 active">
+        <h1>“三减三健”健康生活指南</h1>
+        <p>辽宁中医药大学健康科普作品</p >
+        <button class="btn" onclick="switchPage(1)">开始阅读 →</button>
+    </div>
+
+    <!-- 2. 引言页 -->
+    <div class="page page2">
+        <h1>健康生活的核心</h1>
+        <h2>四大基石</h2>
+        <p>合理膳食 · 适量运动 · 戒烟限酒 · 心理平衡</p >
+        <h2>三减三健</h2>
+        <p>减盐 · 减油 · 减糖 | 健康口腔 · 健康体重 · 健康骨骼</p >
+        <button class="btn" onclick="document.getElementById('tip2').style.display='block'">了解更多</button>
+        <div class="tip" id="tip2">
+            <p>“三减”：减少高盐、高油、高糖食物的摄入<br>“三健”：呵护口腔健康、保持标准体重、养护骨骼健康</p >
+        </div>
+        <button class="btn" onclick="switchPage(2)">下一页 →</button>
+    </div>
+
+    <!-- 3. 减盐页 -->
+    <div class="page page3">
+        <h1>减盐：每日不超过5g</h1>
+        <p>成人每日盐摄入建议 ≤ 5g(约1个啤酒瓶盖)</p >
+        <div class="scale">
+            <div class="scale-bar" id="saltBar"></div>
+            <div class="scale-text" id="saltText">当前：2g（健康）</div>
+        </div>
+        <div>
+            <button class="btn" onclick="changeSalt(5)">推荐量（5g）</button>
+            <button class="btn" onclick="changeSalt(8)">过量（8g）</button>
+        </div>
+        <p id="saltTip" style="color: #2e7d32;">健康的盐摄入量~</p >
+        <button class="btn" onclick="switchPage(3)">下一页 →</button>
+    </div>
+
+    <!-- 4. 减油减糖页 -->
+    <div class="page page4">
+        <h1>减油·减糖</h1>
+        <h2>减油：每日 ≤ 25g（约2白瓷勺）</h2>
+        <h2>减糖：每日 ≤ 25g（约6块方糖）</h2>
+        <div class="food-list">
+            <div class="food-item" onclick="showFoodTip('炸鸡：约含15g油/块')">炸鸡</div>
+            <div class="food-item" onclick="showFoodTip('奶茶：约含20g糖/杯')">奶茶</div>
+        </div>
+        <p id="foodTip"></p >
+        <button class="btn" onclick="switchPage(4)">下一页 →</button>
+    </div>
+
+    <!-- 5. 三健（口腔+体重） -->
+    <div class="page page5">
+        <h1>三健：健康口腔·体重</h1>
+        <h2>健康口腔</h2>
+        <p>早晚刷牙 · 使用含氟牙膏 · 每年洗牙1次</p >
+        <h2>健康体重（BMI计算）</h2>
+        <input type="number" placeholder="身高(cm)" class="bmi-input" id="height">
+        <input type="number" placeholder="体重(kg)" class="bmi-input" id="weight">
+        <button class="btn" onclick="calcBMI()">计算BMI</button>
+        <div class="result" id="bmiResult"></div>
+        <button class="btn" onclick="switchPage(5)">下一页 →</button>
+    </div>
+
+    <!-- 6. 三健（骨骼） -->
+    <div class="page page6">
+        <h1>三健：健康骨骼</h1>
+        <p>✅ 补钙：牛奶、豆制品、深绿色蔬菜</p >
+        <p>✅ 补维D：每天晒太阳15-20分钟</p >
+        <p>✅ 运动：快走、慢跑、跳绳（每周≥3次）</p >
+        <button class="btn" onclick="switchPage(6)">下一页 →</button>
+    </div>
+
+    <!-- 7. 互动测试页 -->
+    <div class="page page7">
+        <h1>你的生活方式健康吗？</h1>
+        <p>1. 你每日盐摄入是否≤5g？<br>
+            <button class="btn" onclick="addScore(10)">是</button>
+            <button class="btn" onclick="addScore(0)">否</button>
+        </p >
+        <p>2. 你每周运动是否≥3次？<br>
+            <button class="btn" onclick="addScore(10)">是</button>
+            <button class="btn" onclick="addScore(0)">否</button>
+        </p >
+        <p id="testScore">当前得分：0</p >
+        <button class="btn" onclick="showTestResult()">查看结果</button>
+        <button class="btn" onclick="switchPage(7)">下一页 →</button>
+    </div>
+
+    <!-- 8. 封底页 -->
+    <div class="page page8">
+        <h1>健康生活，从现在开始</h1>
+        <p>作品主题：三减三健健康生活普及</p >
+        <p>团队：辽宁中医药大学XX队</p >
+        <button class="btn" onclick="switchPage(0)">返回封面</button>
+    </div>
+
+    <script>
+        let currentPageIdx = 0;
+        const pages = document.querySelectorAll(".page");
+        let testScore = 0;
+
+        // 切换页面
+        function switchPage(idx) {
+            pages[currentPageIdx].classList.remove("active");
+            currentPageIdx = idx;
+            pages[currentPageIdx].classList.add("active");
+        }
+
+        // 减盐页交互
+        function changeSalt(num) {
+            const bar = document.getElementById("saltBar");
+            const text = document.getElementById("saltText");
+            const tip = document.getElementById("saltTip");
+            bar.style.width = (num/10)*100 + "%";
+            text.innerText = `当前：${num}g`;
+            if (num > 5) {
+                tip.style.color = "#ff5722";
+                tip.innerText = "过量啦！会增加高血压风险~";
+            } else {
+                tip.style.color = "#2e7d32";
+                tip.innerText = "健康的盐摄入量~";
+            }
+        }
+
+        // 减油减糖页交互
+        function showFoodTip(text) {
+            document.getElementById("foodTip").innerText = text;
+        }
+
+        // BMI计算
+        function calcBMI() {
+            const height = document.getElementById("height").value / 100;
+            const weight = document.getElementById("weight").value;
+            if (!height || !weight) {
+                document.getElementById("bmiResult").innerText = "请输入身高和体重~";
+                return;
+            }
+            const bmi = (weight / (height * height)).toFixed(1);
+            let desc = "";
+            if (bmi < 18.5) desc = "偏瘦，建议增加营养~";
+            else if (bmi < 24) desc = "正常，继续保持！";
+            else desc = "偏胖，建议控制饮食+运动~";
+            document.getElementById("bmiResult").innerText = `你的BMI：${bmi}\n${desc}`;
+        }
+
+        // 互动测试得分
+        function addScore(num) {
+            testScore += num;
+            document.getElementById("testScore").innerText = `当前得分：${testScore}`;
+        }
+        function showTestResult() {
+            let result = "";
+            if (testScore >= 20) result = "你的生活方式很健康！继续保持~";
+            else if (testScore >= 10) result = "你的生活方式还不错，再优化一点会更好~";
+            else result = "建议调整生活习惯，向健康靠近吧！";
+            alert(result);
+        }
+    </script>
+</body>
+</html>
