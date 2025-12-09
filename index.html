@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>“三减三健”健康生活指南</title>
+    <title>“三减三健”健康生活指南 | 辽中医“健”行者</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "微软雅黑"; }
-        body { overflow: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "微软雅黑", "Poppins", sans-serif; }
+        body { overflow: hidden; background: #000; }
+        
         .page { 
             width: 100vw; 
             height: 100vh; 
-            padding: 20px; 
+            padding: 40px 20px; 
             display: flex; 
             flex-direction: column; 
             justify-content: center; 
@@ -19,196 +21,323 @@
             position: absolute;
             top: 0;
             left: 0;
-            transition: opacity 0.5s;
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             opacity: 0;
             pointer-events: none;
+            transform: rotateY(90deg) scale(0.8);
+            border-radius: 16px;
+            box-shadow: 0 0 50px rgba(0,0,0,0.2);
+            overflow: hidden;
         }
-        .page.active { opacity: 1; pointer-events: all; }
+        .page.active { 
+            opacity: 1; 
+            pointer-events: all; 
+            transform: rotateY(0) scale(1);
+        }
 
-        /* 页面背景色 */
-        .page1 { background: #e8f5e9; }
-        .page2 { background: #f1f8e9; }
-        .page3 { background: #fff3e0; }
-        .page4 { background: #ffe0b2; }
-        .page5 { background: #e1f5fe; }
-        .page6 { background: #e0f7fa; }
-        .page7 { background: #f3e5f5; }
-        .page8 { background: #e8f5e9; }
+        .page1 { background: linear-gradient(135deg, #e8f5e9 0%, #4caf50 100%); position: relative; }
+        .page1::before {
+            content: "";
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+            animation: lightMove 15s linear infinite;
+        }
+        .page2 { background: linear-gradient(135deg, #f1f8e9 0%, #8bc34a 100%); }
+        .page3 { background: linear-gradient(135deg, #fff3e0 0%, #ff9800 100%); }
+        .page4 { background: linear-gradient(135deg, #ffe0b2 0%, #ff5722 100%); }
+        .page5 { background: linear-gradient(135deg, #e1f5fe 0%, #03a9f4 100%); }
+        .page6 { background: linear-gradient(135deg, #e0f7fa 0%, #00bcd4 100%); }
+        .page7 { background: linear-gradient(135deg, #f3e5f5 0%, #9c27b0 100%); }
+        .page8 { background: linear-gradient(135deg, #fce4ec 0%, #e91e63 100%); }
+        .page9 { background: linear-gradient(135deg, #e8f5e9 0%, #2e7d32 100%); }
 
-        h1 { font-size: 28px; margin-bottom: 20px; color: #2e7d32; }
-        h2 { font-size: 22px; margin: 15px 0; color: #388e3c; }
-        p { font-size: 16px; line-height: 1.8; margin: 10px 0; }
+        h1 { 
+            font-size: 36px; margin-bottom: 30px; color: #fff;
+            text-shadow: 0 0 10px rgba(255,255,255,0.8), 0 0 20px rgba(0,0,0,0.2);
+            animation: float 3s ease-in-out infinite;
+        }
+        h2 { 
+            font-size: 26px; margin: 20px 0; color: #fff;
+            position: relative;
+        }
+        h2::after {
+            content: ""; position: absolute; bottom: -8px; left: 50%;
+            transform: translateX(-50%); width: 60px; height: 4px;
+            background: #fff; border-radius: 2px; animation: lineGrow 0.8s ease forwards;
+        }
+        p { 
+            font-size: 18px; line-height: 2; margin: 15px 0; color: #fff;
+            max-width: 800px;
+        }
+        .total-score {
+            position: fixed; top: 20px; right: 20px;
+            background: rgba(255,255,255,0.9); color: #2e7d32;
+            padding: 10px 20px; border-radius: 30px;
+            font-size: 18px; font-weight: 600;
+            z-index: 999; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
         .btn { 
-            padding: 10px 20px; 
-            background: #4caf50; 
-            color: white; 
-            border: none; 
-            border-radius: 5px; 
-            margin: 15px 5px; 
-            cursor: pointer; 
-            font-size: 16px;
+            padding: 12px 28px; 
+            background: linear-gradient(90deg, #fff 0%, #f0f0f0 100%); 
+            color: #2e7d32; border: none; border-radius: 30px; 
+            margin: 10px 8px; cursor: pointer; font-size: 18px;
+            font-weight: 600; transition: all 0.3s; position: relative;
+            overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
-        .tip { 
-            display: none; 
-            padding: 15px; 
-            background: #fff; 
-            border-radius: 8px; 
-            margin-top: 15px; 
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
-            width: 80%;
+        .btn:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .btn::after {
+            content: ""; position: absolute; top: 50%; left: 50%;
+            width: 0; height: 0; background: rgba(255,255,255,0.3);
+            border-radius: 50%; transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
         }
-        .scale { 
-            width: 80%; 
-            height: 20px; 
-            background: #eee; 
-            border-radius: 10px; 
-            margin: 20px 0; 
-            position: relative; 
+        .btn:active::after { width: 300px; height: 300px; }
+        .btn-green {
+            background: linear-gradient(90deg, #2e7d32 0%, #4caf50 100%); color: #fff;
         }
-        .scale-bar { 
-            width: 20%; 
-            height: 100%; 
-            background: #ff5722; 
-            border-radius: 10px; 
+
+        /* 提示框默认显示相关样式 */
+        .tip {
+            padding: 20px; background: #fff; border-radius: 12px; margin-top: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15); width: 70%; color: #333;
+            transform: translateY(0); transition: all 0.5s;
         }
-        .scale-text { 
-            position: absolute; 
-            top: -25px; 
-            right: 0; 
-            color: #ff5722; 
+        .tip-hidden {
+            display: none; transform: translateY(20px);
         }
-        .food-list { display: flex; justify-content: space-around; width: 100%; margin: 20px 0; }
-        .food-item { padding: 10px; background: #fff; border-radius: 8px; cursor: pointer; }
-        .bmi-input { margin: 10px 0; padding: 8px; width: 60%; border: 1px solid #ccc; border-radius: 5px; }
-        .result { margin-top: 20px; padding: 15px; background: #fff; border-radius: 8px; width: 80%; }
+
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        @keyframes lineGrow { 0% { width: 0; } 100% { width: 60px; } }
+        @keyframes lightMove { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
+    <div class="total-score" id="totalScore">当前健康总分：100</div>
+
     <!-- 1. 封面页 -->
     <div class="page page1 active">
+        <div style="width: 60%; height: 200px; background: rgba(255,255,255,0.1); border-radius: 16px; display: flex; justify-content: center; align-items: center; border: 2px dashed rgba(255,255,255,0.5); margin-bottom: 20px;">
+            <i class="fa-solid fa-heart-pulse" style="font-size: 60px; color: #fff;"></i>
+        </div>
         <h1>“三减三健”健康生活指南</h1>
-        <p>辽宁中医药大学健康科普作品</p >
-        <button class="btn" onclick="switchPage(1)">开始阅读 →</button>
+        <p>辽宁中医药大学 · 辽中医“健”行者 出品</p >
+        <p>初始健康总分：100分，不良习惯会扣分，健康行为可加分！</p >
+        <button class="btn btn-green" onclick="switchPage(1)">开始探索健康 <i class="fa-solid fa-arrow-right-long"></i></button>
     </div>
-
-    <!-- 2. 引言页 -->
+        <!-- 2. 引言页（修复解锁知识默认可看） -->
     <div class="page page2">
-        <h1>健康生活的核心</h1>
+        <h1>健康生活的核心密码</h1>
         <h2>四大基石</h2>
         <p>合理膳食 · 适量运动 · 戒烟限酒 · 心理平衡</p >
         <h2>三减三健</h2>
         <p>减盐 · 减油 · 减糖 | 健康口腔 · 健康体重 · 健康骨骼</p >
-        <button class="btn" onclick="document.getElementById('tip2').style.display='block'">了解更多</button>
+        <!-- 修复提示框默认显示，按钮改为切换隐藏/显示 -->
+        <button class="btn btn-green" onclick="document.getElementById('tip2').classList.toggle('tip-hidden')">收起/展开知识 <i class="fa-solid fa-lock-open"></i></button>
         <div class="tip" id="tip2">
-            <p>“三减”：减少高盐、高油、高糖食物的摄入<br>“三健”：呵护口腔健康、保持标准体重、养护骨骼健康</p >
+            <p><strong style="color: #2e7d32;"><p><strong style="color: #2e7d32;">“三减”</strong>：告别高盐/高油/高糖的“隐形健康杀手”<br>
+            <strong style="color: #2e7d32;">“三健”</strong>：守护口腔防线、维持体重稳态、筑牢骨骼根基</p >
         </div>
-        <button class="btn" onclick="switchPage(2)">下一页 →</button>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button class="btn" onclick="switchPage(0)">上一页 <i class="fa-solid fa-arrow-left-long"></i></button>
+            <button class="btn" onclick="switchPage(2)">下一页 <i class="fa-solid fa-arrow-right-long"></i></button>
+        </div>
     </div>
 
-    <!-- 3. 减盐页 -->
+    <!-- 3. 减盐页（修复推荐量加分逻辑） -->
     <div class="page page3">
-        <h1>减盐：每日不超过5g</h1>
-        <p>成人每日盐摄入建议 ≤ 5g(约1个啤酒瓶盖)</p >
-        <div class="scale">
-            <div class="scale-bar" id="saltBar"></div>
-            <div class="scale-text" id="saltText">当前：2g（健康）</div>
+        <h1>减盐：每日不超过5g的健康约定</h1>
+        <p>成人每日盐摄入建议 ≤ 5g（约1个啤酒瓶盖的量）</p >
+        <div style="width: 70%; height: 25px; background: rgba(255,255,255,0.3); border-radius: 20px; margin: 30px 0; position: relative; overflow: hidden;">
+            <div class="scale-bar" id="saltBar" style="width: 20%; height: 100%; background: linear-gradient(90deg, #ff5722 0%, #ff9800 100%); border-radius: 20px; display: flex; align-items: center; padding-left: 15px; color: #fff; font-weight: 600;">2g</div>
+            <div class="scale-text" id="saltText" style="position: absolute; top: -40px; right: 0; color: #fff; font-size: 20px; font-weight: 600;">当前：2g（健康）</div>
         </div>
         <div>
-            <button class="btn" onclick="changeSalt(5)">推荐量（5g）</button>
-            <button class="btn" onclick="changeSalt(8)">过量（8g）</button>
+            <button class="btn" onclick="changeSalt(5); resetSaltScore()">推荐量（5g，不扣分）</button>
+            <button class="btn" onclick="changeSalt(8); updateScore(-10); setSaltOver()">过量（8g，扣10分）</button>
         </div>
-        <p id="saltTip" style="color: #2e7d32;">健康的盐摄入量~</p >
-        <button class="btn" onclick="switchPage(3)">下一页 →</button>
+        <p id="saltTip" style="color: #fff; font-weight: 600; margin-top: 20px;">健康的盐摄入量，为血管减负~</p >
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button class="btn" onclick="switchPage(1)">上一页 <i class="fa-solid fa-arrow-left-long"></i></button>
+            <button class="btn" onclick="switchPage(3)">下一页 <i class="fa-solid fa-arrow-right-long"></i></button>
+        </div>
     </div>
 
-    <!-- 4. 减油减糖页 -->
+    <!-- 4. 减油减糖页（选高油高糖食物减分） -->
     <div class="page page4">
-        <h1>减油·减糖</h1>
+        <h1>减油·减糖：告别“甜蜜负担”</h1>
         <h2>减油：每日 ≤ 25g（约2白瓷勺）</h2>
         <h2>减糖：每日 ≤ 25g（约6块方糖）</h2>
-        <div class="food-list">
-            <div class="food-item" onclick="showFoodTip('炸鸡：约含15g油/块')">炸鸡</div>
-            <div class="food-item" onclick="showFoodTip('奶茶：约含20g糖/杯')">奶茶</div>
+        <div style="display: flex; justify-content: center; gap: 30px; width: 100%; margin: 30px 0; perspective: 1000px;">
+            <div class="food-item" onclick="showFoodTip('炸鸡：约含15g油/块，扣5分'); updateScore(-5)" style="width: 180px; height: 220px; background: #fff; border-radius: 16px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: all 0.6s; position: relative; transform-style: preserve-3d;">
+                <span style="font-size: 22px; font-weight: 600; color: #333; backface-visibility: hidden;">炸鸡</span>
+                <span style="font-size: 18px; color: #ff5722; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotateY(180deg); backface-visibility: hidden; width: 100%;">扣5分</span>
+            </div>
+            <div class="food-item" onclick="showFoodTip('奶茶：约含20g糖/杯，扣8分'); updateScore(-8)" style="width: 180px; height: 220px; background: #fff; border-radius: 16px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: all 0.6s; position: relative; transform-style: preserve-3d;">
+                <span style="font-size: 22px; font-weight: 600; color: #333; backface-visibility: hidden;">奶茶</span>
+                <span style="font-size: 18px; color: #ff5722; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotateY(180deg); backface-visibility: hidden; width: 100%;">扣8分</span>
+            </div>
+            <div class="food-item" onclick="showFoodTip('薯片：约含10g油/包，扣3分'); updateScore(-3)" style="width: 180px; height: 220px; background: #fff; border-radius: 16px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: all 0.6s; position: relative; transform-style: preserve-3d;">
+                <span style="font-size: 22px; font-weight: 600; color: #333; backface-visibility: hidden;">薯片</span>
+                <span style="font-size: 18px; color: #ff5722; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotateY(180deg); backface-visibility: hidden; width: 100%;">扣3分</span>
+            </div>
         </div>
-        <p id="foodTip"></p >
-        <button class="btn" onclick="switchPage(4)">下一页 →</button>
+        <p id="foodTip" style="color: #fff; font-size: 18px; font-weight: 600;"></p >
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button class="btn" onclick="switchPage(2)">上一页 <i class="fa-solid fa-arrow-left-long"></i></button>
+            <button class="btn" onclick="switchPage(4)">下一页 <i class="fa-solid fa-arrow-right-long"></i></button>
+        </div>
     </div>
-
-    <!-- 5. 三健（口腔+体重） -->
+        <!-- 5. 口腔与体重健康页（含加分逻辑） -->
     <div class="page page5">
-        <h1>三健：健康口腔·体重</h1>
+        <h1>三健：口腔与体重的健康守护</h1>
         <h2>健康口腔</h2>
-        <p>早晚刷牙 · 使用含氟牙膏 · 每年洗牙1次</p >
-        <h2>健康体重（BMI计算）</h2>
-        <input type="number" placeholder="身高(cm)" class="bmi-input" id="height">
-        <input type="number" placeholder="体重(kg)" class="bmi-input" id="weight">
-        <button class="btn" onclick="calcBMI()">计算BMI</button>
-        <div class="result" id="bmiResult"></div>
-        <button class="btn" onclick="switchPage(5)">下一页 →</button>
+        <p>早晚刷牙 · 使用含氟牙膏 · 每年洗牙1次 · 定期口腔检查</p >
+        <div style="margin: 15px 0;">
+            <button class="btn" onclick="updateScore(5)">每天刷牙≥2次（加5分）</button>
+            <button class="btn" onclick="updateScore(-5)">很少刷牙（扣5分）</button>
+        </div>
+        <div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 30px; border-radius: 16px; border: 1px solid rgba(255,255,255,0.3); margin: 20px 0; width: 70%; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+            <h2>健康体重（BMI计算）</h2>
+            <input type="number" placeholder="身高(cm)" class="bmi-input" id="height" style="margin: 15px 10px; padding: 12px 20px; width: 40%; border: 2px solid rgba(255,255,255,0.5); border-radius: 30px; background: rgba(255,255,255,0.1); color: #fff; font-size: 18px; outline: none;">
+            <input type="number" placeholder="体重(kg)" class="bmi-input" id="weight" style="margin: 15px 10px; padding: 12px 20px; width: 40%; border: 2px solid rgba(255,255,255,0.5); border-radius: 30px; background: rgba(255,255,255,0.1); color: #fff; font-size: 18px; outline: none;">
+            <button class="btn btn-green" onclick="calcBMI()">计算我的BMI</button>
+            <div class="result" id="bmiResult" style="margin-top: 20px; padding: 20px; background: rgba(255,255,255,0.9); border-radius: 12px; width: 100%; color: #333; font-size: 20px; font-weight: 600; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">请输入身高和体重~</div>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button class="btn" onclick="switchPage(3)">上一页 <i class="fa-solid fa-arrow-left-long"></i></button>
+            <button class="btn" onclick="switchPage(5)">下一页 <i class="fa-solid fa-arrow-right-long"></i></button>
+        </div>
     </div>
 
-    <!-- 6. 三健（骨骼） -->
+    <!-- 6. 骨骼健康页（含加分逻辑） -->
     <div class="page page6">
-        <h1>三健：健康骨骼</h1>
-        <p>✅ 补钙：牛奶、豆制品、深绿色蔬菜</p >
-        <p>✅ 补维D：每天晒太阳15-20分钟</p >
-        <p>✅ 运动：快走、慢跑、跳绳（每周≥3次）</p >
-        <button class="btn" onclick="switchPage(6)">下一页 →</button>
+        <h1>三健：健康骨骼的“钙+动”法则</h1>
+        <p><i class="fa-solid fa-apple-whole" style="color: #fff;"></i> 补钙：牛奶、豆制品、深绿色蔬菜（每日300ml奶）</p >
+        <p><i class="fa-solid fa-sun" style="color: #fff;"></i> 补维D：每天晒太阳15-20分钟（避开正午强光）</p >
+        <p><i class="fa-solid fa-person-walking" style="color: #fff;"></i> 运动：快走、慢跑、跳绳（每周≥3次，每次30分钟）</p >
+        <div style="margin: 20px 0;">
+            <button class="btn" onclick="updateScore(8)">每周运动≥3次（加8分）</button>
+            <button class="btn" onclick="updateScore(-6)">几乎不运动（扣6分）</button>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button class="btn" onclick="switchPage(4)">上一页 <i class="fa-solid fa-arrow-left-long"></i></button>
+            <button class="btn" onclick="switchPage(6)">下一页 <i class="fa-solid fa-arrow-right-long"></i></button>
+        </div>
     </div>
 
-    <!-- 7. 互动测试页 -->
+    <!-- 7. 健康习惯综合测试页（选否减分） -->
     <div class="page page7">
-        <h1>你的生活方式健康吗？</h1>
-        <p>1. 你每日盐摄入是否≤5g？<br>
-            <button class="btn" onclick="addScore(10)">是</button>
-            <button class="btn" onclick="addScore(0)">否</button>
-        </p >
-        <p>2. 你每周运动是否≥3次？<br>
-            <button class="btn" onclick="addScore(10)">是</button>
-            <button class="btn" onclick="addScore(0)">否</button>
-        </p >
-        <p id="testScore">当前得分：0</p >
-        <button class="btn" onclick="showTestResult()">查看结果</button>
-        <button class="btn" onclick="switchPage(7)">下一页 →</button>
+        <h1>健康习惯综合测试</h1>
+        <div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(5px); padding: 25px; border-radius: 16px; margin: 20px 0; width: 70%; border: 1px solid rgba(255,255,255,0.3);">
+            <p>1. 你每日盐摄入是否≤5g？</p >
+            <button class="btn" onclick="updateScore(5)">是（加5分）</button>
+            <button class="btn" onclick="updateScore(-5)">否（扣5分）</button>
+        </div>
+        <div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(5px); padding: 25px; border-radius: 16px; margin: 20px 0; width: 70%; border: 1px solid rgba(255,255,255,0.3);">
+            <p>2. 你是否戒烟限酒？</p >
+            <button class="btn" onclick="updateScore(10)">是（加10分）</button>
+            <button class="btn" onclick="updateScore(-8)">否（扣8分）</button>
+        </div>
+        <div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(5px); padding: 25px; border-radius: 16px; margin: 20px 0; width: 70%; border: 1px solid rgba(255,255,255,0.3);">
+            <p>3. 你是否定期做健康体检？</p >
+            <button class="btn" onclick="updateScore(6)">是（加6分）</button>
+            <button class="btn" onclick="updateScore(-4)">否（扣4分）</button>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button class="btn" onclick="switchPage(5)">上一页 <i class="fa-solid fa-arrow-left-long"></i></button>
+            <button class="btn" onclick="switchPage(7)">下一页 <i class="fa-solid fa-arrow-right-long"></i></button>
+        </div>
+    </div>
+        <!-- 8. 心理平衡页（新增页面，含加分逻辑） -->
+    <div class="page page8">
+        <h1>健康基石：心理平衡</h1>
+        <h2>情绪管理小技巧</h2>
+        <p>保持充足睡眠 · 多与亲友沟通 · 培养兴趣爱好 · 学会自我调节</p >
+        <div style="margin: 20px 0;">
+            <button class="btn" onclick="updateScore(7)">每天睡眠≥7小时（加7分）</button>
+            <button class="btn" onclick="updateScore(-7)">经常熬夜（扣7分）</button>
+        </div>
+        <div style="margin: 15px 0;">
+            <button class="btn" onclick="updateScore(5)">有稳定兴趣爱好（加5分）</button>
+            <button class="btn" onclick="updateScore(-3)">长期情绪低落（扣3分）</button>
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 20px;">
+            <button class="btn" onclick="switchPage(6)">上一页 <i class="fa-solid fa-arrow-left-long"></i></button>
+            <button class="btn" onclick="switchPage(8)">查看最终结果 <i class="fa-solid fa-arrow-right-long"></i></button>
+        </div>
     </div>
 
-    <!-- 8. 封底页 -->
-    <div class="page page8">
-        <h1>健康生活，从现在开始</h1>
-        <p>作品主题：三减三健健康生活普及</p >
-        <p>团队：辽宁中医药大学XX队</p >
-        <button class="btn" onclick="switchPage(0)">返回封面</button>
+    <!-- 9. 最终结果总结页 -->
+    <div class="page page9">
+        <h1>你的健康生活报告</h1>
+        <div id="finalResult" style="background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); padding: 30px; border-radius: 16px; width: 70%; margin: 30px 0; box-shadow: 0 10px 30px rgba(0,0,0,0.2); color: #333; font-size: 20px; font-weight: 600; line-height: 2;">
+            请完成所有互动，查看你的专属健康报告！
+        </div>
+        <p style="font-size: 20px;">作品主题：三减三健健康生活普及</p >
+        <p style="font-size: 20px;">团队：辽宁中医药大学 · 辽中医“健”行者</p >
+        <div style="display: flex; gap: 10px; margin-top: 30px;">
+            <button class="btn" onclick="switchPage(7)">返回上一页 <i class="fa-solid fa-arrow-left-long"></i></button>
+            <button class="btn btn-green" onclick="resetAll()">重新开始测评 <i class="fa-solid fa-refresh"></i></button>
+        </div>
     </div>
 
     <script>
         let currentPageIdx = 0;
         const pages = document.querySelectorAll(".page");
-        let testScore = 0;
+        let totalScore = 100;
+        let isSaltOver = false; // 标记是否选过过量盐
 
-        // 切换页面
+        // 切换页面（防越界）
         function switchPage(idx) {
+            if (idx < 0 || idx >= pages.length) return;
             pages[currentPageIdx].classList.remove("active");
             currentPageIdx = idx;
             pages[currentPageIdx].classList.add("active");
+            if (idx === 8) generateFinalReport();
         }
 
-        // 减盐页交互
+        // 更新总分并实时显示
+        function updateScore(score) {
+            totalScore += score;
+            totalScore = totalScore < 0 ? 0 : totalScore;
+            document.getElementById("totalScore").innerText = `当前健康总分：${totalScore}`;
+        }
+
+        // 减盐页相关逻辑
         function changeSalt(num) {
             const bar = document.getElementById("saltBar");
             const text = document.getElementById("saltText");
             const tip = document.getElementById("saltTip");
             bar.style.width = (num/10)*100 + "%";
+            bar.innerText = `${num}g`;
             text.innerText = `当前：${num}g`;
             if (num > 5) {
-                tip.style.color = "#ff5722";
-                tip.innerText = "过量啦！会增加高血压风险~";
+                tip.innerText = "过量啦！长期高盐会增加高血压、肾病风险~";
+                tip.style.color = "#ffeb3b";
+            } else if (num === 5) {
+                tip.innerText = "刚好达到推荐量，保持住！";
+                tip.style.color = "#fff";
             } else {
-                tip.style.color = "#2e7d32";
-                tip.innerText = "健康的盐摄入量~";
+                tip.innerText = "健康的盐摄入量，为血管减负~";
+                tip.style.color = "#fff";
+            }
+        }
+        // 标记盐过量
+        function setSaltOver() {
+            isSaltOver = true;
+        }
+        // 重置盐状态，且选推荐量时加分
+        function resetSaltScore() {
+            if (isSaltOver) {
+                updateScore(10); // 选过量后再选推荐量加10分
+                isSaltOver = false;
             }
         }
 
-        // 减油减糖页交互
+        // 食物提示
         function showFoodTip(text) {
             document.getElementById("foodTip").innerText = text;
         }
@@ -217,29 +346,56 @@
         function calcBMI() {
             const height = document.getElementById("height").value / 100;
             const weight = document.getElementById("weight").value;
-            if (!height || !weight) {
-                document.getElementById("bmiResult").innerText = "请输入身高和体重~";
+            if (!height || !weight || height <= 0 || weight <= 0) {
+                document.getElementById("bmiResult").innerText = "请输入有效的身高和体重~";
                 return;
             }
             const bmi = (weight / (height * height)).toFixed(1);
             let desc = "";
-            if (bmi < 18.5) desc = "偏瘦，建议增加营养~";
-            else if (bmi < 24) desc = "正常，继续保持！";
-            else desc = "偏胖，建议控制饮食+运动~";
-            document.getElementById("bmiResult").innerText = `你的BMI：${bmi}\n${desc}`;
+            if (bmi < 18.5) {
+                desc = `你的BMI：${bmi}\n偏瘦，建议增加优质蛋白摄入，加2分！`;
+                updateScore(2);
+            } else if (bmi < 24) {
+                desc = `你的BMI：${bmi}\n正常，继续保持！加5分！`;
+                updateScore(5);
+            } else if (bmi < 28) {
+                desc = `你的BMI：${bmi}\n偏胖，建议控制饮食+运动，扣3分！`;
+                updateScore(-3);
+            } else {
+                desc = `你的BMI：${bmi}\n肥胖，建议咨询医生制定计划，扣5分！`;
+                updateScore(-5);
+            }
+            document.getElementById("bmiResult").innerText = desc;
         }
 
-        // 互动测试得分
-        function addScore(num) {
-            testScore += num;
-            document.getElementById("testScore").innerText = `当前得分：${testScore}`;
+        // 生成最终健康报告
+        function generateFinalReport() {
+            let report = "";
+            if (totalScore >= 90) {
+                report = `你的最终健康总分：${totalScore}\n🎉 健康模范！你的生活方式十分健康，继续保持！`;
+            } else if (totalScore >= 70) {
+                report = `你的最终健康总分：${totalScore}\n👍 健康达标！只需微调细节就能更完美~`;
+            } else if (totalScore >= 50) {
+                report = `你的最终健康总分：${totalScore}\n💪 有待提升！建议重点改善高盐高油饮食和运动习惯~`;
+            } else {
+                report = `你的最终健康总分：${totalScore}\n⚠️ 需重视健康！尽快调整生活习惯，必要时咨询专业人士~`;
+            }
+            document.getElementById("finalResult").innerText = report;
         }
-        function showTestResult() {
-            let result = "";
-            if (testScore >= 20) result = "你的生活方式很健康！继续保持~";
-            else if (testScore >= 10) result = "你的生活方式还不错，再优化一点会更好~";
-            else result = "建议调整生活习惯，向健康靠近吧！";
-            alert(result);
+
+        // 重置所有数据
+        function resetAll() {
+            totalScore = 100;
+            isSaltOver = false;
+            document.getElementById("totalScore").innerText = `当前健康总分：100`;
+            document.getElementById("finalResult").innerText = "请完成所有互动，查看你的专属健康报告！";
+            document.getElementById("height").value = "";
+            document.getElementById("weight").value = "";
+            document.getElementById("bmiResult").innerText = "请输入身高和体重~";
+            document.getElementById("foodTip").innerText = "";
+            document.getElementById("tip2").classList.remove("tip-hidden"); // 重置提示框显示
+            changeSalt(2);
+            switchPage(0);
         }
     </script>
 </body>
