@@ -112,6 +112,18 @@
         @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         @keyframes lineGrow { 0% { width: 0; } 100% { width: 60px; } }
         @keyframes lightMove { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* 【修改区域】食物卡片悬浮翻面样式（核心调整） */
+        .food-item {
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .food-item:hover {
+            transform: rotateY(180deg);
+        }
+        .food-item > span {
+            backface-visibility: hidden;
+        }
     </style>
 </head>
 <body>
@@ -127,7 +139,7 @@
         <p>初始健康总分：100分，不良习惯会扣分，健康行为可加分！</p >
         <button class="btn btn-green" onclick="switchPage(1)">开始探索健康 <i class="fa-solid fa-arrow-right-long"></i></button>
     </div>
-        <!-- 2. 引言页（修复解锁知识默认可看） -->
+    <!-- 2. 引言页（修复解锁知识默认可看） -->
     <div class="page page2">
         <h1>健康生活的核心密码</h1>
         <h2>四大基石</h2>
@@ -137,6 +149,7 @@
         <!-- 修复提示框默认显示，按钮改为切换隐藏/显示 -->
         <button class="btn btn-green" onclick="document.getElementById('tip2').classList.toggle('tip-hidden')">收起/展开知识 <i class="fa-solid fa-lock-open"></i></button>
         <div class="tip" id="tip2">
+            <p>“三减”：减少高盐、高油、高糖食物的摄入<br>“三健”：呵护口腔健康、保持标准体重、养护骨骼健康</p >
             <p><strong style="color: #2e7d32;"><p><strong style="color: #2e7d32;">“三减”</strong>：告别高盐/高油/高糖的“隐形健康杀手”<br>
             <strong style="color: #2e7d32;">“三健”</strong>：守护口腔防线、维持体重稳态、筑牢骨骼根基</p >
         </div>
@@ -165,23 +178,24 @@
         </div>
     </div>
 
-    <!-- 4. 减油减糖页（选高油高糖食物减分） -->
+    <!-- 4. 减油减糖页（【修改区域】拆分悬浮和点击逻辑） -->
     <div class="page page4">
         <h1>减油·减糖：告别“甜蜜负担”</h1>
         <h2>减油：每日 ≤ 25g（约2白瓷勺）</h2>
         <h2>减糖：每日 ≤ 25g（约6块方糖）</h2>
         <div style="display: flex; justify-content: center; gap: 30px; width: 100%; margin: 30px 0; perspective: 1000px;">
-            <div class="food-item" onclick="showFoodTip('炸鸡：约含15g油/块，扣5分'); updateScore(-5)" style="width: 180px; height: 220px; background: #fff; border-radius: 16px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: all 0.6s; position: relative; transform-style: preserve-3d;">
-                <span style="font-size: 22px; font-weight: 600; color: #333; backface-visibility: hidden;">炸鸡</span>
-                <span style="font-size: 18px; color: #ff5722; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotateY(180deg); backface-visibility: hidden; width: 100%;">扣5分</span>
+            <!-- 悬浮展示油糖含量，点击才扣分 -->
+            <div class="food-item" style="width: 180px; height: 220px; background: #fff; border-radius: 16px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); position: relative;" onclick="showFoodTip('炸鸡：约含15g油/块，扣5分'); updateScore(-5)">
+                <span style="font-size: 22px; font-weight: 600; color: #333;">炸鸡</span>
+                <span style="font-size: 16px; color: #ff5722; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotateY(180deg); width: 100%;">15g油/块<br>扣5分</span>
             </div>
-            <div class="food-item" onclick="showFoodTip('奶茶：约含20g糖/杯，扣8分'); updateScore(-8)" style="width: 180px; height: 220px; background: #fff; border-radius: 16px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: all 0.6s; position: relative; transform-style: preserve-3d;">
-                <span style="font-size: 22px; font-weight: 600; color: #333; backface-visibility: hidden;">奶茶</span>
-                <span style="font-size: 18px; color: #ff5722; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotateY(180deg); backface-visibility: hidden; width: 100%;">扣8分</span>
+            <div class="food-item" style="width: 180px; height: 220px; background: #fff; border-radius: 16px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); position: relative;" onclick="showFoodTip('奶茶：约含20g糖/杯，扣8分'); updateScore(-8)">
+                <span style="font-size: 22px; font-weight: 600; color: #333;">奶茶</span>
+                <span style="font-size: 16px; color: #ff5722; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotateY(180deg); width: 100%;">20g糖/杯<br>扣8分</span>
             </div>
-            <div class="food-item" onclick="showFoodTip('薯片：约含10g油/包，扣3分'); updateScore(-3)" style="width: 180px; height: 220px; background: #fff; border-radius: 16px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); transition: all 0.6s; position: relative; transform-style: preserve-3d;">
-                <span style="font-size: 22px; font-weight: 600; color: #333; backface-visibility: hidden;">薯片</span>
-                <span style="font-size: 18px; color: #ff5722; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotateY(180deg); backface-visibility: hidden; width: 100%;">扣3分</span>
+            <div class="food-item" style="width: 180px; height: 220px; background: #fff; border-radius: 16px; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); position: relative;" onclick="showFoodTip('薯片：约含10g油/包，扣3分'); updateScore(-3)">
+                <span style="font-size: 22px; font-weight: 600; color: #333;">薯片</span>
+                <span style="font-size: 16px; color: #ff5722; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotateY(180deg); width: 100%;">10g油/包<br>扣3分</span>
             </div>
         </div>
         <p id="foodTip" style="color: #fff; font-size: 18px; font-weight: 600;"></p >
@@ -251,7 +265,7 @@
             <button class="btn" onclick="switchPage(7)">下一页 <i class="fa-solid fa-arrow-right-long"></i></button>
         </div>
     </div>
-        <!-- 8. 心理平衡页（新增页面，含加分逻辑） -->
+    <!-- 8. 心理平衡页（新增页面，含加分逻辑） -->
     <div class="page page8">
         <h1>健康基石：心理平衡</h1>
         <h2>情绪管理小技巧</h2>
@@ -299,10 +313,11 @@
             if (idx === 8) generateFinalReport();
         }
 
-        // 更新总分并实时显示
+        // 【保留修改】更新总分并限制最高100分
         function updateScore(score) {
             totalScore += score;
             totalScore = totalScore < 0 ? 0 : totalScore;
+            totalScore = totalScore > 100 ? 100 : totalScore; // 限制总分不超过100
             document.getElementById("totalScore").innerText = `当前健康总分：${totalScore}`;
         }
 
@@ -341,6 +356,8 @@
         function showFoodTip(text) {
             document.getElementById("foodTip").innerText = text;
         }
+
+        // 【删除】原flipFoodItem函数（已改为CSS悬浮实现）
 
         // BMI计算
         function calcBMI() {
@@ -400,3 +417,4 @@
     </script>
 </body>
 </html>
+
